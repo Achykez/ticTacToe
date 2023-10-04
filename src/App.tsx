@@ -20,6 +20,8 @@ function App() {
   const [playerY, setPlayerY] = useState("");
   const [players, setPlayers] = useState(true);
 
+  const [errorMessage, setErrorMessage] = useState("");
+
   useEffect(() => {
     setBoard(generateBoard(rowNumber));
   }, [rowNumber]);
@@ -38,8 +40,11 @@ function App() {
 
   const handleStartGame = (event: React.FormEvent) => {
     event.preventDefault();
-    if (playerX && playerY && rowNumber >= 3) {
+    if (playerX && playerY && rowNumber >= 3 && rowNumber <= 10) {
       setPlayers(false);
+      setErrorMessage(""); 
+    } else {
+      setErrorMessage("Please enter player names and select between 3 and 10 rows.");
     }
   };
 
@@ -81,7 +86,7 @@ function App() {
             value={playerY}
             onChange={(e) => setPlayerY(e.target.value)}
           />
-          <input
+          <input            
             type="text"
             style={inputStyle}
             placeholder="Enter number of rows"
@@ -93,6 +98,7 @@ function App() {
               setRowNumber(parseInt(numbersOnly));
             }}
           />
+           {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
           <button type="submit">Start game</button>
         </form>
       ) : (
